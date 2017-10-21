@@ -1,0 +1,6 @@
+.vagrant
+.vscode
+__pycache__
+*.pyc
+ubuntu-xenial*
+db_settings.py
