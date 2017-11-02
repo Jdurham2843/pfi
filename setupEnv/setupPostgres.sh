@@ -11,6 +11,7 @@ sudo -u postgres psql -c "ALTER ROLE john SET client_encoding TO 'utf8';"
 sudo -u postgres psql -c "ALTER ROLE john SET default_transaction_isolation TO 'read committed';"
 sudo -u postgres psql -c "ALTER ROLE john SET timezone TO 'US/Central';"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE pfi TO john;"
+sudo -u postgres psql -c "ALTER USER john CREATEDB;"
 
 sudo cp /vagrant/setupEnv/postgresql.conf /etc/postgresql/9.6/main/
 sudo cp /vagrant/setupEnv/pg_hba.conf /etc/postgresql/9.6/main/
