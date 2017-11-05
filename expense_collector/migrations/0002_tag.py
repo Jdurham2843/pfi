@@ -7,23 +7,20 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    initial = True
-
     dependencies = [
+        ('expense_collector', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Transaction',
+            name='Tag',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('type', models.CharField(choices=[('Debit', 'DB'), ('Credit', 'CR')], max_length=2)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('description', models.CharField(max_length=400)),
+                ('name', models.CharField(max_length=255, unique=True)),
+                ('transactions', models.ManyToManyField(to='expense_collector.Transaction')),
             ],
             options={
-                'ordering': ('name', 'type', 'price', 'description'),
+                'ordering': ('name',),
             },
         ),
     ]
