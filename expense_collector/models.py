@@ -2,6 +2,11 @@
 from django.db import models
 import uuid
 
+class TransactionSet(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=400)
+
 class Transaction(models.Model):
     DEBIT = 'DB'
     CREDIT = 'CR'
@@ -33,6 +38,7 @@ class Tag(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, unique=True)
     transactions = models.ManyToManyField(Transaction)
+    transaction_sets = models.ManyToManyField(TransactionSet)
 
     def __str__(self):
         return self.name
