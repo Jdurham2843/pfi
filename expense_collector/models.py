@@ -35,7 +35,7 @@ class Transaction(models.Model):
     )
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=400)
-    transaction_set = models.ForeignKey(TransactionSet, on_delete=models.CASCADE, default=None)
+    transaction_set = models.ForeignKey(TransactionSet, on_delete=models.CASCADE, blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name="transaction")
 
     def __str__(self):
