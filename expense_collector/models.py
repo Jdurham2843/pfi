@@ -2,6 +2,7 @@
 from django.db import models
 import uuid
 
+
 class Tag(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, unique=True)
@@ -12,11 +13,13 @@ class Tag(models.Model):
     class Meta:
         ordering = ('name',)
 
+
 class TransactionSet(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=400)
     tags = models.ManyToManyField(Tag, related_name="transaction_set")
+
 
 class Transaction(models.Model):
     DEBIT = 'DB'
@@ -33,15 +36,15 @@ class Transaction(models.Model):
         max_length=2,
         choices=TRANSACTION_TYPE_CHOICES,
     )
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=400)
     transaction_set = models.ForeignKey(TransactionSet, on_delete=models.CASCADE, blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name="transaction")
 
     def __str__(self):
-        return '<{type}: {name} ${price} -- \"{description}\">'.format(
-            self.type, self.name, self.price, self.description
+        return '<{type}: {name} ${amount} -- \"{description}\">'.format(
+            self.type, self.name, self.amount, self.description
         )
     
     class Meta:
-        ordering = ('name', 'type', 'price', 'description',)
+        ordering = ('name', 'type', 'amount', 'description',)
