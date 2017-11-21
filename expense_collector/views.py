@@ -1,13 +1,14 @@
 from decimal import Decimal
 
-from django.http import HttpResponse, Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.db import IntegrityError, transaction
+from django.urls import reverse
 
 from .models import Transaction, Tag
 
 
-# Create Transaction View + helpers    
+# Create Transaction View + helpers
 def create_transaction_view(request):
     if request.method == 'POST':
         try:
@@ -23,8 +24,7 @@ def create_transaction_view(request):
             if tags_list:
                 add_tags_to_transaction(transaction, tags_list)
         finally:
-            transaction.save()
-            return HttpResponse('OK')
+            return HttpResponseRedirect(reverse('create_transaction_view'))
     elif request.method == 'GET':
         return render(request, 'pfi/index.html', {})
 

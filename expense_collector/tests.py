@@ -39,7 +39,7 @@ class TransactionTests(TestCase):
         response = self.client.post('/expense/create-transaction', 
                                     self.generate_data())
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
         added_debit = Transaction.objects.first()
         self.assertEqual(added_debit.name, 'Eggs')
@@ -53,7 +53,7 @@ class TransactionTests(TestCase):
         response = self.client.post('/expense/create-transaction', 
                                     self.generate_data_no_tags())
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
         added_debit = Transaction.objects.first()
         self.assertEqual(added_debit.name, 'Eggs')
