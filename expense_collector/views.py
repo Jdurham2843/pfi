@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
+from django.db import IntegrityError, transaction
 
 from .models import Transaction, Tag
 
@@ -9,22 +10,34 @@ from .models import Transaction, Tag
 # Create Transaction View + helpers    
 def create_transaction_view(request):
     if request.method == 'POST':
-        transaction = create_transaction(request)
-        tags_list = request.POST.get('tags').split('|||')
-        
-        if tags_list:
-            add_tags_to_transaction(transaction, tags_list)
-        return HttpResponse('OK')
+        try:
+            transaction = create_transaction(request)
+        except IntegrityError:
+            raise Http404()
+
+        try:
+            tags_list = request.POST.get('tags').split('|||')
+        except Exception:
+            pass
+        else:
+            if tags_list:
+                add_tags_to_transaction(transaction, tags_list)
+        finally:
+            transaction.save()
+            return HttpResponse('OK')
     elif request.method == 'GET':
         return render(request, 'pfi/index.html', {})
 
 
+@transaction.atomic
 def create_transaction(request):
+    """ Helper function to create Transaction object """
     transaction = Transaction.objects.create(
             name=request.POST.get('name'),
             amount=Decimal(request.POST.get('amount')),
             type=request.POST.get('type'),
             description=request.POST.get('description'))
+
     return transaction
 
 
@@ -36,4 +49,3 @@ def add_tags_to_transaction(transaction, tags_list):
             else:
                 new_tag = Tag.objects.create(name=tag)
                 transaction.tags.add(new_tag)
-            transaction.save()
