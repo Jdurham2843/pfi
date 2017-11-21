@@ -6,7 +6,7 @@ from .models import Transaction
 
 
 # Create your tests here.
-class DebitTests(TestCase):
+class TransactionTests(TestCase):
     def setUp(self):
         self.client = Client()
 
