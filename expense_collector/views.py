@@ -1,21 +1,22 @@
 from decimal import Decimal
+
 from django.http import HttpResponse, Http404
+from django.shortcuts import render
 
 from .models import Transaction, Tag
 
 
 # Create Transaction View + helpers    
-def create_transaction_controller(request):
+def create_transaction_view(request):
     if request.method == 'POST':
         transaction = create_transaction(request)
-
         tags_list = request.POST.get('tags').split('|||')
         
         if tags_list:
             add_tags_to_transaction(transaction, tags_list)
         return HttpResponse('OK')
-    else:
-        raise Http404()
+    elif request.method == 'GET':
+        return render(request, 'pfi/index.html', {})
 
 
 def create_transaction(request):
