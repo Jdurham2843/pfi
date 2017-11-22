@@ -9,19 +9,17 @@ from ..models import Transaction, Tag
 def create_transaction(request):
     """ Helper function to create Transaction object """
     transaction = Transaction.objects.create(
-            name=request.POST.get('name'),
-            amount=Decimal(request.POST.get('amount')),
-            type=request.POST.get('type'),
-            description=request.POST.get('description'))
+            name=request['name'],
+            amount=Decimal(request['amount']),
+            type=request['type'],
+            description=request['description'])
     
     try:
-        tags_list = request.POST.get('tags').split('|||')
+        tags_list = request['tags'].split('|||')
     except Exception:
         pass
     else:
         add_tags_to_transaction(transaction, tags_list)
-    finally:
-        return transaction
 
 
 def add_tags_to_transaction(transaction, tags_list):
