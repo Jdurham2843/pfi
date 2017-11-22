@@ -13,8 +13,15 @@ def create_transaction(request):
             amount=Decimal(request.POST.get('amount')),
             type=request.POST.get('type'),
             description=request.POST.get('description'))
-
-    return transaction
+    
+    try:
+        tags_list = request.POST.get('tags').split('|||')
+    except Exception:
+        pass
+    else:
+        add_tags_to_transaction(transaction, tags_list)
+    finally:
+        return transaction
 
 
 def add_tags_to_transaction(transaction, tags_list):
