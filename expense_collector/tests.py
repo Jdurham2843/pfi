@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.test import TestCase, Client
 
-from .models import Transaction
+from .models import Transaction, Tag
 
 
 # Create your tests here.
@@ -34,6 +34,17 @@ class TransactionTests(TestCase):
             'amount': '0.52',
             'description': 'Eggs have protein',
         }
+    
+    def generate_transaction(self):
+        transaction = Transaction.objects.create(name='Eggs',
+                                                 type='DB',
+                                                 amount='0.52',
+                                                 description='protein')
+        
+        for tag in ('Eggs', 'Grocery'):
+            new_tag = Tag.objects.create(name=tag)
+            transaction.tags.add(new_tag)
+        transaction.save()
 
     def test_add_valid_debit_to_collector(self):
         response = self.client.post('/expense/create-transaction', 
@@ -77,4 +88,13 @@ class TransactionTests(TestCase):
         pass
     
     def test_remove_transaction(self):
-        pass
+        self.generate_transaction()
+        transaction = Transaction.objects.first()
+        transaction_uuid = transaction.uuid
+        
+        response = self.client.post(
+              '/expense/{uuid}/remove-transaction'.format(
+                  uuid=transaction_uuid))
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Transaction.objects.filter(uuid=transaction_uuid))

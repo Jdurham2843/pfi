@@ -1,10 +1,10 @@
 """ Expense Collector Models """
 from django.db import models
-import uuid
+import uuid as uid
 
 
 class Tag(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(default=uid.uuid4, editable=False)
     name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
@@ -15,7 +15,7 @@ class Tag(models.Model):
 
 
 class TransactionSet(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(default=uid.uuid4, editable=False)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=400)
     tags = models.ManyToManyField(Tag, related_name="transaction_set")
@@ -30,7 +30,7 @@ class Transaction(models.Model):
         (CREDIT, 'Credit'),
     )
 
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(default=uid.uuid4, editable=False)
     name = models.CharField(max_length=50)
     type = models.CharField(
         max_length=2,

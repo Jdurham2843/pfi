@@ -24,7 +24,6 @@ def create_transaction_view(request):
         else:
             return HttpResponseRedirect(reverse('create_transaction_view'))
     elif request.method == 'GET':
-        # TODO: build out transaction html page
-        return render(request, 'pfi/index.html', {})
+        return render(request, 'pfi/create_transaction.html', {})
     else:
         return HttpResponseBadRequest()
