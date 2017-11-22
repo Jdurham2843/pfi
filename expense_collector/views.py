@@ -1,6 +1,6 @@
 """ Views for expense_collector """
 
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -26,3 +26,5 @@ def create_transaction_view(request):
     elif request.method == 'GET':
         # TODO: build out transaction html page
         return render(request, 'pfi/index.html', {})
+    else:
+        return HttpResponseBadRequest()

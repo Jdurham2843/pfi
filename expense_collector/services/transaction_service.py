@@ -14,11 +14,8 @@ def create_transaction(request):
             type=request['type'],
             description=request['description'])
     
-    try:
+    if request['tags']:
         tags_list = request['tags'].split('|||')
-    except Exception:
-        pass
-    else:
         add_tags_to_transaction(transaction, tags_list)
 
 
