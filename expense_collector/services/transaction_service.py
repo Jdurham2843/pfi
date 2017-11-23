@@ -27,3 +27,9 @@ def add_tags_to_transaction(transaction, tags_list):
             else:
                 new_tag = Tag.objects.create(name=tag)
                 transaction.tags.add(new_tag)
+
+
+def remove_transaction(request):
+    transaction = Transaction.objects.get(uuid=request['uuid'])
+    if transaction:
+        transaction.delete()

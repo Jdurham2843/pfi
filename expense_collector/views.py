@@ -7,7 +7,10 @@ from django.urls import reverse
 from .services import transaction_service
 
 
-# Create Transaction View + helpers
+def index_view(request):
+    return render(request, 'pfi/index.html', {})
+
+
 def create_transaction_view(request):
     if request.method == 'POST':
         try:
@@ -27,3 +30,17 @@ def create_transaction_view(request):
         return render(request, 'pfi/create_transaction.html', {})
     else:
         return HttpResponseBadRequest()
+
+
+def remove_transaction_view(request, uuid):
+    if request.method == 'POST':
+        remove_request = {
+            'uuid': uuid
+        }
+
+        try:
+            transaction_service.remove_transaction(remove_request)
+        except Exception:
+            raise Http404()
+        else:
+            return HttpResponseRedirect(reverse('index_view'))
