@@ -44,3 +44,5 @@ def remove_transaction_view(request, uuid):
             raise Http404()
         else:
             return HttpResponseRedirect(reverse('index_view'))
+    else:
+        return HttpResponseBadRequest()

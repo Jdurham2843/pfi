@@ -2,12 +2,12 @@
 from decimal import Decimal
 
 from django.db import transaction
+
 from ..models import Transaction, Tag
 
 
 @transaction.atomic
 def create_transaction(request):
-    """ Helper function to create Transaction object """
     transaction = Transaction.objects.create(
             name=request['name'],
             amount=Decimal(request['amount']),
@@ -22,7 +22,7 @@ def create_transaction(request):
 def add_tags_to_transaction(transaction, tags_list):
     for tag in tags_list:
             current_tag = Tag.objects.filter(name=tag)
-            if current_tag.count() > 0:
+            if current_tag.count():
                 transaction.tags.add(current_tag)
             else:
                 new_tag = Tag.objects.create(name=tag)
@@ -33,3 +33,5 @@ def remove_transaction(request):
     transaction = Transaction.objects.get(uuid=request['uuid'])
     if transaction:
         transaction.delete()
+    else:
+        raise Exception('Transaction does not exist')
