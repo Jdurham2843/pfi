@@ -16,7 +16,7 @@ class TransactionTests(TestCase):
             'type': 'DB',
             'amount': '0.52',
             'description': 'Eggs have protein',
-            'tags': 'Eggs|||Grocery'
+            'tags': 'Eggs,Grocery'
         }
     
     def generate_data_no_tags(self):

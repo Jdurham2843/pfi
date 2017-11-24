@@ -19,7 +19,7 @@ def create_transaction_view(request):
                 'type': request.POST['type'],
                 'amount': request.POST['amount'],
                 'description': request.POST.get('description', ''),
-                'tags': request.POST.get('tags', '')
+                'tags': request.POST.get('tags', '').split(',')
             }
             transaction_service.create_transaction(transaction_request)
         except Exception:

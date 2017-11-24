@@ -15,8 +15,7 @@ def create_transaction(request):
             description=request['description'])
     
     if request['tags']:
-        tags_list = request['tags'].split('|||')
-        add_tags_to_transaction(transaction, tags_list)
+        add_tags_to_transaction(transaction, request['tags'])
 
 
 def add_tags_to_transaction(transaction, tags_list):
